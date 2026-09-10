@@ -1,0 +1,314 @@
+.tag-manager-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 300;
+  animation: overlayFade 0.15s ease;
+}
+
+@keyframes overlayFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tag-manager {
+  width: min(90vw, 520px);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-container);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-modal);
+  animation: modalSlide 0.2s ease;
+  overflow: hidden;
+}
+
+@keyframes modalSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tag-manager__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.tag-manager__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tag-manager__title {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.tag-manager__subtitle {
+  margin: 0;
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+  line-height: var(--lh-normal);
+}
+
+.tag-manager__close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.tag-manager__close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tag-manager__close:hover {
+  color: var(--text-primary);
+  background: var(--surface-high);
+  border-color: var(--border);
+}
+
+.tag-manager__add {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.tag-manager__add-row {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.tag-manager__input {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--surface-lowest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: var(--fs-body-sm);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.tag-manager__input:hover {
+  border-color: var(--border-light);
+}
+
+.tag-manager__input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+.tag-manager__input::placeholder {
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tag-manager__input--error {
+  border-color: var(--error-text);
+}
+
+.tag-manager__input--error:focus {
+  box-shadow: 0 0 0 2px rgba(255, 180, 171, 0.2);
+}
+
+.tag-manager__add-btn {
+  height: 40px;
+  padding: 0 16px;
+  background: var(--primary);
+  color: var(--primary-text);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.tag-manager__add-btn:hover {
+  background: var(--primary-hover);
+}
+
+.tag-manager__add-btn:active {
+  transform: scale(0.98);
+}
+
+.tag-manager__error {
+  font-size: var(--fs-label);
+  font-family: var(--font-mono);
+  color: var(--error-text);
+  letter-spacing: var(--ls-label);
+}
+
+.tag-manager__list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.tag-manager__list-header {
+  padding: var(--space-sm) var(--space-lg);
+}
+
+.tag-manager__list-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.tag-manager__tags {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-lg) var(--space-lg);
+  gap: 4px;
+}
+
+.tag-manager__tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-low);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.tag-manager__tag:hover {
+  border-color: var(--border-light);
+  background: var(--surface-high);
+}
+
+.tag-manager__tag--default {
+  opacity: 0.85;
+}
+
+.tag-manager__tag-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.tag-manager__tag-name {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  color: var(--text-primary);
+}
+
+.tag-manager__tag-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  color: var(--text-muted);
+  background: var(--surface-highest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  text-transform: uppercase;
+}
+
+.tag-manager__tag-delete {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.tag-manager__tag-delete svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tag-manager__tag-delete:hover {
+  color: var(--error-text);
+  background: rgba(255, 180, 171, 0.08);
+  border-color: rgba(255, 180, 171, 0.15);
+}
+
+.tag-manager__tag-delete:active {
+  transform: scale(0.9);
+}
+
+@media (max-width: 640px) {
+  .tag-manager {
+    width: calc(100vw - 32px);
+    max-height: 90vh;
+  }
+
+  .tag-manager__header {
+    padding: var(--space-md);
+  }
+
+  .tag-manager__add {
+    padding: var(--space-md);
+  }
+
+  .tag-manager__add-row {
+    flex-direction: column;
+  }
+
+  .tag-manager__tags {
+    padding: 0 var(--space-md) var(--space-md);
+  }
+}
