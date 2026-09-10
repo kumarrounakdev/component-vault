@@ -1,0 +1,300 @@
+import React, { createContext, useState, useEffect } from "react";
+
+export const VaultContext = createContext();
+
+const STORAGE_KEY = "component-vault";
+const TAGS_STORAGE_KEY = "component-vault-tags";
+const COLLECTIONS_STORAGE_KEY = "component-vault-collections";
+const DEFAULT_TAGS = ["UI", "HOOKS", "LAYOUTS", "UTILS", "FORMS", "DATA"];
+
+const loadFromStorage = () => {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
+const loadTagsFromStorage = () => {
+  try {
+    const data = localStorage.getItem(TAGS_STORAGE_KEY);
+    return data ? JSON.parse(data) : DEFAULT_TAGS;
+  } catch {
+    return DEFAULT_TAGS;
+  }
+};
+
+const loadCollectionsFromStorage = () => {
+  try {
+    const data = localStorage.getItem(COLLECTIONS_STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveToStorage = (components) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(components));
+  } catch (e) {
+    console.error("Failed to save:", e);
+  }
+};
+
+const saveTagsToStorage = (tags) => {
+  try {
+    localStorage.setItem(TAGS_STORAGE_KEY, JSON.stringify(tags));
+  } catch (e) {
+    console.error("Failed to save tags:", e);
+  }
+};
+
+const saveCollectionsToStorage = (collections) => {
+  try {
+    localStorage.setItem(COLLECTIONS_STORAGE_KEY, JSON.stringify(collections));
+  } catch (e) {
+    console.error("Failed to save collections:", e);
+  }
+};
+
+export const VaultProvider = ({ children }) => {
+  const [components, setComponents] = useState(loadFromStorage);
+  const [tags, setTags] = useState(loadTagsFromStorage);
+  const [collections, setCollections] = useState(loadCollectionsFromStorage);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    saveToStorage(components);
+  }, [components]);
+
+  useEffect(() => {
+    saveTagsToStorage(tags);
+  }, [tags]);
+
+  useEffect(() => {
+    saveCollectionsToStorage(collections);
+  }, [collections]);
+
+  // Components
+  const addComponent = (newComponent) => {
+    setComponents((prev) => [
+      ...prev,
+      {
+        ...newComponent,
+        id: Date.now().toString(),
+        createdAt: new Date().toISOString(),
+        favourite: false,
+      },
+    ]);
+  };
+
+  const getComponent = (id) => {
+    return components.find((c) => c.id === id) || null;
+  };
+
+  const toggleFavourite = (id) => {
+    setComponents((prev) =>
+      prev.map((comp) =>
+        comp.id === id ? { ...comp, favourite: !comp.favourite } : comp
+      )
+    );
+  };
+
+  const deleteComponent = (id) => {
+    setComponents((prev) => prev.filter((comp) => comp.id !== id));
+    // Remove from all collections
+    setCollections((prev) =>
+      prev.map((col) => ({
+        ...col,
+        componentIds: col.componentIds.filter((cId) => cId !== id),
+      }))
+    );
+  };
+
+  const updateComponent = (id, updatedData) => {
+    setComponents((prev) =>
+      prev.map((comp) =>
+        comp.id === id ? { ...comp, ...updatedData } : comp
+      )
+    );
+  };
+
+  // Tags
+  const addTag = (tagName) => {
+    const formatted = tagName.trim().toUpperCase();
+    if (!formatted) return false;
+    if (tags.includes(formatted)) return false;
+    setTags((prev) => [...prev, formatted]);
+    return true;
+  };
+
+  const deleteTag = (tagName) => {
+    if (DEFAULT_TAGS.includes(tagName)) return false;
+    setTags((prev) => prev.filter((t) => t !== tagName));
+    setComponents((prev) =>
+      prev.map((comp) =>
+        comp.tag === tagName ? { ...comp, tag: "UI" } : comp
+      )
+    );
+    return true;
+  };
+
+  const isDefaultTag = (tagName) => {
+    return DEFAULT_TAGS.includes(tagName);
+  };
+
+  // Collections
+  const addCollection = (name, description) => {
+    const trimmedName = name.trim();
+    if (!trimmedName) return false;
+    if (collections.some((c) => c.name.toLowerCase() === trimmedName.toLowerCase())) {
+      return false;
+    }
+
+    setCollections((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        name: trimmedName,
+        description: description?.trim() || "",
+        componentIds: [],
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+    return true;
+  };
+
+  const getCollection = (id) => {
+    return collections.find((c) => c.id === id) || null;
+  };
+
+  const updateCollection = (id, updatedData) => {
+    setCollections((prev) =>
+      prev.map((col) =>
+        col.id === id ? { ...col, ...updatedData } : col
+      )
+    );
+  };
+
+  const deleteCollection = (id) => {
+    setCollections((prev) => prev.filter((col) => col.id !== id));
+  };
+
+  const addToCollection = (collectionId, componentId) => {
+    setCollections((prev) =>
+      prev.map((col) => {
+        if (col.id === collectionId) {
+          if (col.componentIds.includes(componentId)) return col;
+          return {
+            ...col,
+            componentIds: [...col.componentIds, componentId],
+          };
+        }
+        return col;
+      })
+    );
+  };
+
+  const removeFromCollection = (collectionId, componentId) => {
+    setCollections((prev) =>
+      prev.map((col) => {
+        if (col.id === collectionId) {
+          return {
+            ...col,
+            componentIds: col.componentIds.filter((id) => id !== componentId),
+          };
+        }
+        return col;
+      })
+    );
+  };
+
+  const getComponentCollections = (componentId) => {
+    return collections.filter((col) =>
+      col.componentIds.includes(componentId)
+    );
+  };
+
+  // Filtering
+  const getFilteredComponents = () => {
+    let filtered = [...components];
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (comp) =>
+          comp.name.toLowerCase().includes(query) ||
+          comp.description.toLowerCase().includes(query) ||
+          comp.tag.toLowerCase().includes(query)
+      );
+    }
+
+    switch (activeFilter) {
+      case "favourites":
+        filtered = filtered.filter((comp) => comp.favourite);
+        break;
+      case "recent":
+        filtered = filtered.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        break;
+      default: {
+        // Check collection filter
+        if (activeFilter.startsWith("collection:")) {
+          const colId = activeFilter.replace("collection:", "");
+          const collection = getCollection(colId);
+          if (collection) {
+            filtered = filtered.filter((comp) =>
+              collection.componentIds.includes(comp.id)
+            );
+          }
+        } else {
+          // Tag filter
+          const matchingTag = tags.find(
+            (t) => t.toLowerCase() === activeFilter.toLowerCase()
+          );
+          if (matchingTag) {
+            filtered = filtered.filter((comp) => comp.tag === matchingTag);
+          }
+        }
+        break;
+      }
+    }
+
+    return filtered;
+  };
+
+  return (
+    <VaultContext.Provider
+      value={{
+        components,
+        tags,
+        collections,
+        activeFilter,
+        setActiveFilter,
+        searchQuery,
+        setSearchQuery,
+        addComponent,
+        getComponent,
+        toggleFavourite,
+        deleteComponent,
+        updateComponent,
+        addTag,
+        deleteTag,
+        isDefaultTag,
+        addCollection,
+        getCollection,
+        updateCollection,
+        deleteCollection,
+        addToCollection,
+        removeFromCollection,
+        getComponentCollections,
+        getFilteredComponents,
+      }}
+    >
+      {children}
+    </VaultContext.Provider>
+  );
+};
