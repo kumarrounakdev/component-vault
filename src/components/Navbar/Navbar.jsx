@@ -19,6 +19,7 @@ const Navbar = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
   const filterRef = useRef(null);
+  const searchRef = useRef(null);
 
   const FILTERS = [
     { id: "all", label: "All Components" },
@@ -38,6 +39,17 @@ const Navbar = () => {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const handleAdd = () => {
@@ -84,6 +96,7 @@ const Navbar = () => {
             </svg>
 
             <input
+              ref={searchRef}
               type="text"
               className="navbar__search-input"
               placeholder="Search components, tags, hooks..."
