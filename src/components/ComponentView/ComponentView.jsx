@@ -19,49 +19,6 @@ loader.init().then((monaco) => {
   monaco.editor.defineTheme(THEME_NAME, editorTheme);
 });
 
-// Add this function:
-const handleCreateTag = () => {
-  const formatted = newTagName.trim().toUpperCase();
-
-  if (!formatted) {
-    setNewTagError("Tag name cannot be empty");
-    return;
-  }
-
-  if (formatted.length > 20) {
-    setNewTagError("Max 20 characters");
-    return;
-  }
-
-  if (!/^[A-Z0-9-_ ]+$/.test(formatted)) {
-    setNewTagError("Only letters, numbers, hyphens");
-    return;
-  }
-
-  const success = addTag(formatted);
-  if (!success) {
-    setNewTagError("Tag already exists");
-    return;
-  }
-
-  setEditTag(formatted);
-  setNewTagName("");
-  setNewTagError("");
-  setShowNewTag(false);
-};
-
-const handleNewTagKeyDown = (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    handleCreateTag();
-  }
-  if (e.key === "Escape") {
-    setShowNewTag(false);
-    setNewTagName("");
-    setNewTagError("");
-  }
-};
-
 const ComponentView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -72,14 +29,9 @@ const ComponentView = () => {
     toggleFavourite,
     updateComponent,
     tags,
-    addTag,
     isNameTaken,
   } = useContext(VaultContext);
   const component = getComponent(id);
-
-  const [showNewTag, setShowNewTag] = useState(false);
-  const [newTagName, setNewTagName] = useState("");
-  const [newTagError, setNewTagError] = useState("");
 
   const [activeTab, setActiveTab] = useState("jsx");
   const [copied, setCopied] = useState(false);
