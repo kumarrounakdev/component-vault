@@ -14,7 +14,7 @@ loader.init().then((monaco) => {
 });
 
 const CreateComponent = () => {
-  const { addComponent, tags, addTag } = useContext(VaultContext);
+  const { addComponent, tags, addTag, isNameTaken } = useContext(VaultContext);
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -44,6 +44,8 @@ export default MyComponent;`);
   const validate = () => {
     const newErrors = {};
     if (!name.trim()) newErrors.name = "Component name is required";
+    else if (isNameTaken(name))
+      newErrors.name = "A component with this name already exists";
     if (!description.trim()) newErrors.description = "Description is required";
     if (!code.trim()) newErrors.code = "Code cannot be empty";
     setErrors(newErrors);

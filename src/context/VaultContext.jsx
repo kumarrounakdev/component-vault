@@ -90,6 +90,14 @@ export const VaultProvider = ({ children }) => {
     ]);
   };
 
+  const isNameTaken = (name, excludeId = null) => {
+    const trimmed = name.trim().toLowerCase();
+    if (!trimmed) return false;
+    return components.some(
+      (c) => c.id !== excludeId && c.name.trim().toLowerCase() === trimmed
+    );
+  };
+
   const getComponent = (id) => {
     return components.find((c) => c.id === id) || null;
   };
@@ -277,6 +285,7 @@ export const VaultProvider = ({ children }) => {
         searchQuery,
         setSearchQuery,
         addComponent,
+        isNameTaken,
         getComponent,
         toggleFavourite,
         deleteComponent,

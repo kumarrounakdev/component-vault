@@ -73,6 +73,7 @@ const ComponentView = () => {
     updateComponent,
     tags,
     addTag,
+    isNameTaken,
   } = useContext(VaultContext);
   const component = getComponent(id);
 
@@ -141,6 +142,8 @@ const ComponentView = () => {
   const validate = () => {
     const newErrors = {};
     if (!editName.trim()) newErrors.name = "Component name is required";
+    else if (isNameTaken(editName, id))
+      newErrors.name = "A component with this name already exists";
     if (!editDescription.trim())
       newErrors.description = "Description is required";
     if (!editCode.trim()) newErrors.code = "Code cannot be empty";
