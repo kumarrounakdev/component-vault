@@ -64,6 +64,12 @@ export const VaultProvider = ({ children }) => {
   const [collections, setCollections] = useState(loadCollectionsFromStorage);
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearchQuery(searchQuery), 250);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
     saveToStorage(components);
@@ -229,8 +235,8 @@ export const VaultProvider = ({ children }) => {
   const getFilteredComponents = () => {
     let filtered = [...components];
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+    if (debouncedSearchQuery.trim()) {
+      const query = debouncedSearchQuery.toLowerCase();
       filtered = filtered.filter(
         (comp) =>
           comp.name.toLowerCase().includes(query) ||
