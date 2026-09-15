@@ -11,6 +11,7 @@ const Dashboard = () => {
     deleteComponent,
     getFilteredComponents,
     activeFilter,
+    activeTagFilters,
     searchQuery,
   } = useContext(VaultContext);
 
@@ -43,6 +44,10 @@ const Dashboard = () => {
           <p className="dashboard__empty-filter-desc">
             {searchQuery
               ? `No components match "${searchQuery}"`
+              : activeTagFilters.length > 0
+              ? `No components tagged ${activeTagFilters
+                  .map((t) => `"${t}"`)
+                  .join(", ")}`
               : `No components in "${activeFilter}" filter`}
           </p>
         </div>
@@ -52,13 +57,18 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      {(activeFilter !== "all" || searchQuery) && (
+      {(activeFilter !== "all" || searchQuery || activeTagFilters.length > 0) && (
         <div className="dashboard__status">
           <span className="dashboard__status-text">
             Showing {filtered.length}{" "}
             {filtered.length === 1 ? "component" : "components"}
             {activeFilter !== "all" && (
               <span className="dashboard__status-filter">{activeFilter}</span>
+            )}
+            {activeTagFilters.length > 0 && (
+              <span className="dashboard__status-filter">
+                {activeTagFilters.join(", ")}
+              </span>
             )}
             {searchQuery && (
               <span className="dashboard__status-query">"{searchQuery}"</span>

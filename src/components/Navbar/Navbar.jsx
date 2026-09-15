@@ -10,6 +10,9 @@ const Navbar = () => {
     collections,
     activeFilter,
     setActiveFilter,
+    activeTagFilters,
+    setActiveTagFilters,
+    toggleTagFilter,
     searchQuery,
     setSearchQuery,
   } = useContext(VaultContext);
@@ -62,6 +65,14 @@ const Navbar = () => {
     navigate("/");
   };
 
+  const handleTagToggle = (tagName) => {
+    toggleTagFilter(tagName);
+  };
+
+  const clearTagFilters = () => {
+    setActiveTagFilters([]);
+  };
+
   return (
     <>
       <header className="navbar">
@@ -70,6 +81,7 @@ const Navbar = () => {
             className="navbar__title"
             onClick={() => {
               setActiveFilter("all");
+              setActiveTagFilters([]);
               setSearchQuery("");
               navigate("/");
             }}
@@ -175,7 +187,7 @@ const Navbar = () => {
               className={`navbar__filter-toggle ${
                 filterOpen ? "navbar__filter-toggle--open" : ""
               } ${
-                activeFilter !== "all"
+                activeFilter !== "all" || activeTagFilters.length > 0
                   ? "navbar__filter-toggle--filtered"
                   : ""
               }`}
@@ -197,7 +209,11 @@ const Navbar = () => {
               </svg>
 
               <span className="navbar__filter-label">
-                {activeFilter.startsWith("collection:")
+                {activeTagFilters.length > 0
+                  ? `${activeTagFilters.length} tag${
+                      activeTagFilters.length > 1 ? "s" : ""
+                    }`
+                  : activeFilter.startsWith("collection:")
                   ? collections.find(
                       (c) =>
                         c.id === activeFilter.replace("collection:", "")
@@ -259,38 +275,50 @@ const Navbar = () => {
                 </div>
 
                 <div className="navbar__filter-divider"></div>
-                <div className="navbar__filter-section-label">Tags</div>
+                <div className="navbar__filter-section-label">
+                  Tags
+                  {activeTagFilters.length > 0 && (
+                    <button
+                      type="button"
+                      className="navbar__filter-clear-tags"
+                      onClick={clearTagFilters}
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
 
                 <div className="navbar__filter-section">
-                  {FILTERS.slice(3).map((filter) => (
-                    <button
-                      key={filter.id}
-                      type="button"
-                      className={`navbar__filter-option ${
-                        activeFilter === filter.id
-                          ? "navbar__filter-option--active"
-                          : ""
-                      }`}
-                      onClick={() => handleFilterSelect(filter.id)}
-                    >
-                      {activeFilter === filter.id ? (
-                        <svg
-                          className="navbar__filter-option-icon"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      ) : (
-                        <span className="navbar__filter-option-spacer" />
-                      )}
-                      <span>{filter.label}</span>
-                    </button>
-                  ))}
+                  {FILTERS.slice(3).map((filter) => {
+                    const isActive = activeTagFilters.includes(filter.label);
+                    return (
+                      <button
+                        key={filter.id}
+                        type="button"
+                        className={`navbar__filter-option ${
+                          isActive ? "navbar__filter-option--active" : ""
+                        }`}
+                        onClick={() => handleTagToggle(filter.label)}
+                      >
+                        {isActive ? (
+                          <svg
+                            className="navbar__filter-option-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        ) : (
+                          <span className="navbar__filter-option-spacer" />
+                        )}
+                        <span>{filter.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Collections in filter */}

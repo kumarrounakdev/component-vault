@@ -63,6 +63,7 @@ export const VaultProvider = ({ children }) => {
   const [tags, setTags] = useState(loadTagsFromStorage);
   const [collections, setCollections] = useState(loadCollectionsFromStorage);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [activeTagFilters, setActiveTagFilters] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
@@ -147,6 +148,7 @@ export const VaultProvider = ({ children }) => {
   const deleteTag = (tagName) => {
     if (DEFAULT_TAGS.includes(tagName)) return false;
     setTags((prev) => prev.filter((t) => t !== tagName));
+    setActiveTagFilters((prev) => prev.filter((t) => t !== tagName));
     setComponents((prev) =>
       prev.map((comp) =>
         comp.tag === tagName ? { ...comp, tag: "UI" } : comp
@@ -232,6 +234,14 @@ export const VaultProvider = ({ children }) => {
   };
 
   // Filtering
+  const toggleTagFilter = (tagName) => {
+    setActiveTagFilters((prev) =>
+      prev.includes(tagName)
+        ? prev.filter((t) => t !== tagName)
+        : [...prev, tagName]
+    );
+  };
+
   const getFilteredComponents = () => {
     let filtered = [...components];
 
@@ -242,6 +252,12 @@ export const VaultProvider = ({ children }) => {
           comp.name.toLowerCase().includes(query) ||
           comp.description.toLowerCase().includes(query) ||
           comp.tag.toLowerCase().includes(query)
+      );
+    }
+
+    if (activeTagFilters.length > 0) {
+      filtered = filtered.filter((comp) =>
+        activeTagFilters.includes(comp.tag)
       );
     }
 
@@ -264,14 +280,6 @@ export const VaultProvider = ({ children }) => {
               collection.componentIds.includes(comp.id)
             );
           }
-        } else {
-          // Tag filter
-          const matchingTag = tags.find(
-            (t) => t.toLowerCase() === activeFilter.toLowerCase()
-          );
-          if (matchingTag) {
-            filtered = filtered.filter((comp) => comp.tag === matchingTag);
-          }
         }
         break;
       }
@@ -288,6 +296,8 @@ export const VaultProvider = ({ children }) => {
         collections,
         activeFilter,
         setActiveFilter,
+        activeTagFilters,
+        toggleTagFilter,
         searchQuery,
         setSearchQuery,
         addComponent,
