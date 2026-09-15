@@ -19,6 +19,22 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  const highlightMatch = (text, query) => {
+    const q = query.trim();
+    if (!q || !text) return text;
+    const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const parts = text.split(new RegExp(`(${escaped})`, "ig"));
+    return parts.map((part, i) =>
+      part.toLowerCase() === q.toLowerCase() ? (
+        <mark key={i} className="card__highlight">
+          {part}
+        </mark>
+      ) : (
+        part
+      )
+    );
+  };
+
   if (components.length === 0) {
     return <EmptyState />;
   }
@@ -146,8 +162,12 @@ const Dashboard = () => {
               </div>
 
               <div className="card__content">
-                <h3 className="card__title">{comp.name}</h3>
-                <p className="card__desc">{comp.description}</p>
+                <h3 className="card__title">
+                  {highlightMatch(comp.name, searchQuery)}
+                </h3>
+                <p className="card__desc">
+                  {highlightMatch(comp.description, searchQuery)}
+                </p>
               </div>
 
               <div className="card__preview">

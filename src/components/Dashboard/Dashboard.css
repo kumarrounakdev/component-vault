@@ -362,6 +362,13 @@
   border-color: rgba(255, 107, 138, 0.2);
 }
 
+.card__highlight {
+  background: rgba(255, 211, 105, 0.25);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
 @media (max-width: 768px) {
   .dashboard__grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
