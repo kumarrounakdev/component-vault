@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export const VaultContext = createContext();
 
@@ -59,12 +60,17 @@ const saveCollectionsToStorage = (collections) => {
 };
 
 export const VaultProvider = ({ children }) => {
+  const [searchParams] = useSearchParams();
   const [components, setComponents] = useState(loadFromStorage);
   const [tags, setTags] = useState(loadTagsFromStorage);
   const [collections, setCollections] = useState(loadCollectionsFromStorage);
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState(
+    () => searchParams.get("filter") || "all"
+  );
   const [activeTagFilters, setActiveTagFilters] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(
+    () => searchParams.get("q") || ""
+  );
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("date");
 

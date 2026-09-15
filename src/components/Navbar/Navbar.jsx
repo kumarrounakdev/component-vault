@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { VaultContext } from "../../context/VaultContext";
 import TagManager from "../TagManager/TagManager";
 import "./Navbar.css";
@@ -18,6 +18,7 @@ const Navbar = () => {
   } = useContext(VaultContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const [, setSearchParams] = useSearchParams();
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
@@ -55,6 +56,36 @@ const Navbar = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    setSearchParams(
+      (prev) => {
+        const params = new URLSearchParams(prev);
+        if (activeFilter === "all") {
+          params.delete("filter");
+        } else {
+          params.set("filter", activeFilter);
+        }
+        return params;
+      },
+      { replace: true }
+    );
+  }, [activeFilter, setSearchParams]);
+
+  useEffect(() => {
+    setSearchParams(
+      (prev) => {
+        const params = new URLSearchParams(prev);
+        if (!searchQuery) {
+          params.delete("q");
+        } else {
+          params.set("q", searchQuery);
+        }
+        return params;
+      },
+      { replace: true }
+    );
+  }, [searchQuery, setSearchParams]);
+
   const handleAdd = () => {
     navigate("/create");
   };
@@ -62,7 +93,9 @@ const Navbar = () => {
   const handleFilterSelect = (filterId) => {
     setActiveFilter(filterId);
     setFilterOpen(false);
-    navigate("/");
+    if (location.pathname !== "/") {
+      navigate("/");
+    }
   };
 
   const handleTagToggle = (tagName) => {
@@ -83,7 +116,9 @@ const Navbar = () => {
               setActiveFilter("all");
               setActiveTagFilters([]);
               setSearchQuery("");
-              navigate("/");
+              if (location.pathname !== "/") {
+                navigate("/");
+              }
             }}
             style={{ cursor: "pointer" }}
           >
