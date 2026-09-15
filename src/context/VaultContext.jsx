@@ -66,6 +66,7 @@ export const VaultProvider = ({ children }) => {
   const [activeTagFilters, setActiveTagFilters] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("date");
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearchQuery(searchQuery), 250);
@@ -285,6 +286,14 @@ export const VaultProvider = ({ children }) => {
       }
     }
 
+    if (sortBy === "name") {
+      filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      filtered = filtered.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+    }
+
     return filtered;
   };
 
@@ -300,6 +309,8 @@ export const VaultProvider = ({ children }) => {
         toggleTagFilter,
         searchQuery,
         setSearchQuery,
+        sortBy,
+        setSortBy,
         addComponent,
         isNameTaken,
         getComponent,

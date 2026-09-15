@@ -13,6 +13,8 @@ const Dashboard = () => {
     activeFilter,
     activeTagFilters,
     searchQuery,
+    sortBy,
+    setSortBy,
   } = useContext(VaultContext);
 
   const navigate = useNavigate();
@@ -76,6 +78,58 @@ const Dashboard = () => {
           </span>
         </div>
       )}
+
+      <div className="dashboard__toolbar">
+        <div className="dashboard__sort">
+          <span className="dashboard__sort-label">Sort</span>
+          <button
+            type="button"
+            className={`dashboard__sort-btn ${
+              sortBy === "date" ? "dashboard__sort-btn--active" : ""
+            }`}
+            onClick={() => setSortBy("date")}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+              <line x1="8" y1="14" x2="10" y2="14" />
+            </svg>
+            Date Added
+          </button>
+          <button
+            type="button"
+            className={`dashboard__sort-btn ${
+              sortBy === "name" ? "dashboard__sort-btn--active" : ""
+            }`}
+            onClick={() => setSortBy("name")}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="4" y1="12" x2="14" y2="12" />
+              <line x1="4" y1="18" x2="9" y2="18" />
+            </svg>
+            Name
+          </button>
+        </div>
+      </div>
 
       <div className="dashboard__grid">
         {filtered.map((comp) => (
