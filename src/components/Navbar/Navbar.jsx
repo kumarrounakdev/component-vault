@@ -2,10 +2,12 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { VaultContext } from "../../context/VaultContext";
 import TagManager from "../TagManager/TagManager";
+import { exportVault } from "../../utils/exportVault";
 import "./Navbar.css";
 
 const Navbar = () => {
   const {
+    components,
     tags,
     collections,
     activeFilter,
@@ -88,6 +90,10 @@ const Navbar = () => {
 
   const handleAdd = () => {
     navigate("/create");
+  };
+
+  const handleExport = () => {
+    exportVault({ components, tags, collections });
   };
 
   const handleFilterSelect = (filterId) => {
@@ -176,6 +182,28 @@ const Navbar = () => {
         </div>
 
         <div className="navbar__right">
+          {/* Export Link */}
+          <button
+            type="button"
+            className="navbar__export-btn"
+            onClick={handleExport}
+            aria-label="Export vault to JSON"
+            title="Export vault to JSON"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </button>
+
           {/* Collections Link */}
           <button
             type="button"

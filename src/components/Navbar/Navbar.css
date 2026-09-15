@@ -480,3 +480,31 @@
   border-color: var(--primary);
   background: rgba(88, 166, 255, 0.1);
 }
+
+.navbar__export-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.navbar__export-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.navbar__export-btn:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(88, 166, 255, 0.05);
+}
