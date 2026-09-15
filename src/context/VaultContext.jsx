@@ -143,6 +143,18 @@ export const VaultProvider = ({ children }) => {
     );
   };
 
+  const importVaultData = (data) => {
+    if (Array.isArray(data.components)) {
+      setComponents(data.components);
+    }
+    if (Array.isArray(data.tags) && data.tags.length > 0) {
+      setTags(data.tags);
+    }
+    if (Array.isArray(data.collections)) {
+      setCollections(data.collections);
+    }
+  };
+
   // Tags
   const addTag = (tagName) => {
     const formatted = tagName.trim().toUpperCase();
@@ -323,6 +335,7 @@ export const VaultProvider = ({ children }) => {
         toggleFavourite,
         deleteComponent,
         updateComponent,
+        importVaultData,
         addTag,
         deleteTag,
         isDefaultTag,

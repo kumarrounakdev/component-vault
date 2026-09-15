@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { VaultContext } from "../../context/VaultContext";
 import EmptyState from "../EmptyState/EmptyState";
+import { importVault } from "../../utils/importVault";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -15,9 +16,33 @@ const Dashboard = () => {
     searchQuery,
     sortBy,
     setSortBy,
+    importVaultData,
   } = useContext(VaultContext);
 
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportFile = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      const data = await importVault(file);
+      if (
+        window.confirm(
+          "Importing will replace your current vault (components, tags, collections). Continue?"
+        )
+      ) {
+        importVaultData(data);
+      }
+    } catch (err) {
+      window.alert(err.message || "Failed to import file");
+    }
+  };
 
   const highlightMatch = (text, query) => {
     const q = query.trim();
@@ -96,6 +121,33 @@ const Dashboard = () => {
       )}
 
       <div className="dashboard__toolbar">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="application/json,.json"
+          className="dashboard__file-input"
+          onChange={handleImportFile}
+        />
+        <button
+          type="button"
+          className="dashboard__import-btn"
+          onClick={handleImportClick}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          Import
+        </button>
         <div className="dashboard__sort">
           <span className="dashboard__sort-label">Sort</span>
           <button

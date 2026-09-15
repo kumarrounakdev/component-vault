@@ -1,12 +1,41 @@
-import React from "react";
+import React, { useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { VaultContext } from "../../context/VaultContext";
+import { importVault } from "../../utils/importVault";
 import "./EmptyState.css";
 
 const EmptyState = () => {
   const navigate = useNavigate();
+  const { importVaultData } = useContext(VaultContext);
+  const fileInputRef = useRef(null);
+
+  const handleImportFile = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      const data = await importVault(file);
+      if (
+        window.confirm(
+          "Importing will replace your current vault (components, tags, collections). Continue?"
+        )
+      ) {
+        importVaultData(data);
+      }
+    } catch (err) {
+      window.alert(err.message || "Failed to import file");
+    }
+  };
 
   return (
     <div className="empty">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="application/json,.json"
+        className="empty__file-input"
+        onChange={handleImportFile}
+      />
       <div className="empty__icon">
         <svg
           viewBox="0 0 24 24"
@@ -33,6 +62,13 @@ const EmptyState = () => {
         onClick={() => navigate("/create")}
       >
         + Create Component
+      </button>
+      <button
+        type="button"
+        className="empty__btn empty__btn--secondary"
+        onClick={() => fileInputRef.current?.click()}
+      >
+        Import from JSON
       </button>
     </div>
   );
