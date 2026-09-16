@@ -120,6 +120,37 @@
   background: rgba(88, 166, 255, 0.05);
 }
 
+.component-view__duplicate-btn {
+  height: 36px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.component-view__duplicate-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.component-view__duplicate-btn:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(88, 166, 255, 0.05);
+}
+
 .component-view__cancel-btn {
   height: 36px;
   padding: 0 16px;

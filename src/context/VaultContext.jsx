@@ -143,6 +143,22 @@ export const VaultProvider = ({ children }) => {
     );
   };
 
+  const duplicateComponent = (id) => {
+    const source = components.find((c) => c.id === id);
+    if (!source) return;
+
+    setComponents((prev) => [
+      ...prev,
+      {
+        ...source,
+        id: Date.now().toString(),
+        name: `${source.name} (copy)`,
+        favourite: false,
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+  };
+
   const importVaultData = (data) => {
     if (Array.isArray(data.components)) {
       setComponents(data.components);
@@ -335,6 +351,7 @@ export const VaultProvider = ({ children }) => {
         toggleFavourite,
         deleteComponent,
         updateComponent,
+        duplicateComponent,
         importVaultData,
         addTag,
         deleteTag,

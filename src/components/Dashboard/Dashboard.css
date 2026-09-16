@@ -351,6 +351,12 @@
   border-color: rgba(88, 166, 255, 0.15);
 }
 
+.card__action--duplicate:hover {
+  color: var(--primary);
+  background: rgba(88, 166, 255, 0.08);
+  border-color: rgba(88, 166, 255, 0.15);
+}
+
 .card__action--delete:hover {
   color: var(--error-text);
   background: rgba(255, 180, 171, 0.08);

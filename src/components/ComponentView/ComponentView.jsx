@@ -28,6 +28,7 @@ const ComponentView = () => {
     deleteComponent,
     toggleFavourite,
     updateComponent,
+    duplicateComponent,
     tags,
     isNameTaken,
   } = useContext(VaultContext);
@@ -66,6 +67,11 @@ const ComponentView = () => {
 
   const handleDelete = () => {
     deleteComponent(id);
+    navigate("/");
+  };
+
+  const handleDuplicate = () => {
+    duplicateComponent(id);
     navigate("/");
   };
 
@@ -189,6 +195,25 @@ const ComponentView = () => {
                     {componentCollections.length}
                   </span>
                 )}
+              </button>
+
+              <button
+                type="button"
+                className="component-view__duplicate-btn"
+                onClick={handleDuplicate}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Duplicate
               </button>
 
               <button
