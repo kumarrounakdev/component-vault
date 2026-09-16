@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { VaultContext } from "../../context/VaultContext";
 import EmptyState from "../EmptyState/EmptyState";
@@ -22,6 +22,17 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const [copiedId, setCopiedId] = useState(null);
+
+  const handleCopyCode = async (comp) => {
+    try {
+      await navigator.clipboard.writeText(comp.code || "");
+      setCopiedId(comp.id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      // clipboard unavailable
+    }
+  };
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -241,6 +252,40 @@ const Dashboard = () => {
 
             <div className="card__footer">
               <div className="card__footer-left">
+                <button
+                  type="button"
+                  className={`card__action card__action--copy ${
+                    copiedId === comp.id ? "card__action--copied" : ""
+                  }`}
+                  onClick={() => handleCopyCode(comp)}
+                  aria-label="Copy component code"
+                >
+                  {copiedId === comp.id ? (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  ) : (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  )}
+                </button>
+
                 <button
                   type="button"
                   className="card__action card__action--edit"

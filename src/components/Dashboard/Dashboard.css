@@ -357,6 +357,13 @@
   border-color: rgba(88, 166, 255, 0.15);
 }
 
+.card__action--copy:hover,
+.card__action--copied {
+  color: var(--tertiary-text);
+  background: rgba(111, 221, 120, 0.08);
+  border-color: rgba(111, 221, 120, 0.15);
+}
+
 .card__action--delete:hover {
   color: var(--error-text);
   background: rgba(255, 180, 171, 0.08);
