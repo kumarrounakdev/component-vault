@@ -285,11 +285,24 @@
   background: var(--surface-low);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  animation: cardEntrance 0.4s ease both;
   transition:
     border-color var(--transition-fast),
     background var(--transition-fast),
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
+}
+
+.dashboard__grid--list .card {
+  animation-name: none;
+}
+
+.dashboard__grid .card:nth-child(2n) {
+  animation-delay: 0.04s;
+}
+
+.dashboard__grid .card:nth-child(3n) {
+  animation-delay: 0.08s;
 }
 
 .card:hover {
