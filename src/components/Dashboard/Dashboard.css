@@ -321,9 +321,9 @@
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
-  color: var(--primary);
-  background: rgba(88, 166, 255, 0.1);
-  border: 1px solid rgba(88, 166, 255, 0.2);
+  color: var(--pill-text, var(--primary));
+  background: var(--pill-bg, rgba(88, 166, 255, 0.1));
+  border: 1px solid var(--pill-border, rgba(88, 166, 255, 0.2));
   border-radius: var(--radius-sm);
   padding: 3px 10px;
   line-height: 1.6;

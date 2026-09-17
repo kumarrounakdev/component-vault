@@ -8,6 +8,26 @@ const TAGS_STORAGE_KEY = "component-vault-tags";
 const COLLECTIONS_STORAGE_KEY = "component-vault-collections";
 const DEFAULT_TAGS = ["UI", "HOOKS", "LAYOUTS", "UTILS", "FORMS", "DATA"];
 
+const TAG_PALETTE = [
+  { text: "#58a6ff", bg: "rgba(88, 166, 255, 0.12)", border: "rgba(88, 166, 255, 0.25)" },
+  { text: "#6fdd78", bg: "rgba(111, 221, 120, 0.12)", border: "rgba(111, 221, 120, 0.25)" },
+  { text: "#ffd169", bg: "rgba(255, 209, 105, 0.12)", border: "rgba(255, 209, 105, 0.25)" },
+  { text: "#ff9c6b", bg: "rgba(255, 156, 107, 0.12)", border: "rgba(255, 156, 107, 0.25)" },
+  { text: "#d3bbff", bg: "rgba(211, 187, 255, 0.12)", border: "rgba(211, 187, 255, 0.25)" },
+  { text: "#ff8eb3", bg: "rgba(255, 142, 179, 0.12)", border: "rgba(255, 142, 179, 0.25)" },
+  { text: "#7ee7ee", bg: "rgba(126, 231, 238, 0.12)", border: "rgba(126, 231, 238, 0.25)" },
+  { text: "#10b981", bg: "rgba(16, 185, 129, 0.12)", border: "rgba(16, 185, 129, 0.25)" },
+];
+
+const getTagColor = (tagName) => {
+  const key = (tagName || "").trim().toUpperCase();
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  }
+  return TAG_PALETTE[hash % TAG_PALETTE.length];
+};
+
 const loadFromStorage = () => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
@@ -364,6 +384,7 @@ export const VaultProvider = ({ children }) => {
         removeFromCollection,
         getComponentCollections,
         getFilteredComponents,
+        getTagColor,
       }}
     >
       {children}

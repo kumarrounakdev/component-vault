@@ -150,3 +150,20 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--pill-text);
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  line-height: 1.6;
+  white-space: nowrap;
+}

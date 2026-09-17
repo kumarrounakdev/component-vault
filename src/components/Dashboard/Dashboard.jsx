@@ -18,6 +18,7 @@ const Dashboard = () => {
     sortBy,
     setSortBy,
     importVaultData,
+    getTagColor,
   } = useContext(VaultContext);
 
   const navigate = useNavigate();
@@ -274,7 +275,16 @@ const Dashboard = () => {
           <div className="card" key={comp.id}>
             <Link to={`/component/${comp.id}`} className="card__body">
               <div className="card__header">
-                <span className="card__tag">{comp.tag}</span>
+                <span
+                  className="card__tag tag-pill"
+                  style={{
+                    "--pill-text": getTagColor(comp.tag).text,
+                    "--pill-bg": getTagColor(comp.tag).bg,
+                    "--pill-border": getTagColor(comp.tag).border,
+                  }}
+                >
+                  {comp.tag}
+                </span>
                 <span className="card__date">
                   {new Date(comp.createdAt).toLocaleDateString("en-US", {
                     month: "short",
