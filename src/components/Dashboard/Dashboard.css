@@ -540,13 +540,32 @@
     padding: var(--space-md) var(--gutter);
   }
 
+  .dashboard__toolbar {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--space-xs);
+  }
+
   .dashboard__grid {
     grid-template-columns: 1fr;
     gap: var(--space-sm);
   }
 
+  .dashboard__grid--list .card__body {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .dashboard__status-text {
+    font-size: var(--fs-label);
+  }
+
   .card__title {
     font-size: var(--fs-body-lg);
+  }
+
+  .card__body {
+    padding: var(--space-sm);
   }
 
   .dashboard__view-toggle {

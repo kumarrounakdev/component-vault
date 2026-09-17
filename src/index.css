@@ -187,3 +187,17 @@ a {
     animation-delay: 0ms !important;
   }
 }
+
+@media (max-width: 640px) {
+  :root {
+    --fs-h1: 26px;
+    --fs-h2: 20px;
+    --fs-h3: 16px;
+    --space-lg: 20px;
+    --gutter: 12px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}

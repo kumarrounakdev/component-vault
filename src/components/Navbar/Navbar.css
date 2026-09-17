@@ -455,8 +455,17 @@
 }
 
 @media (max-width: 640px) {
+  .navbar {
+    gap: var(--space-xs);
+  }
+
   .navbar__right {
     gap: var(--space-xs);
+  }
+
+  .navbar__title {
+    font-size: var(--fs-body-lg);
+    white-space: nowrap;
   }
 
   .navbar__primary {
@@ -471,6 +480,21 @@
   .navbar__filter-dropdown {
     right: -16px;
     min-width: calc(100vw - 32px);
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar__left {
+    gap: var(--space-xs);
+  }
+
+  .navbar__export-btn,
+  .navbar__collections-btn {
+    display: none;
+  }
+
+  .navbar__count-badge {
+    font-size: 10px;
   }
 }
 
