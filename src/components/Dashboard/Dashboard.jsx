@@ -23,6 +23,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [copiedId, setCopiedId] = useState(null);
+  const [view, setView] = useState("grid");
 
   const handleCopyCode = async (comp) => {
     try {
@@ -209,9 +210,66 @@ const Dashboard = () => {
             Name
           </button>
         </div>
+
+        <div className="dashboard__view-toggle">
+          <button
+            type="button"
+            className={`dashboard__view-btn ${
+              view === "grid" ? "dashboard__view-btn--active" : ""
+            }`}
+            onClick={() => setView("grid")}
+            aria-label="Grid view"
+            aria-pressed={view === "grid"}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className={`dashboard__view-btn ${
+              view === "list" ? "dashboard__view-btn--active" : ""
+            }`}
+            onClick={() => setView("list")}
+            aria-label="List view"
+            aria-pressed={view === "list"}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <div className="dashboard__grid">
+      <div
+        className={`dashboard__grid ${
+          view === "list" ? "dashboard__grid--list" : ""
+        }`}
+      >
         {filtered.map((comp) => (
           <div className="card" key={comp.id}>
             <Link to={`/component/${comp.id}`} className="card__body">

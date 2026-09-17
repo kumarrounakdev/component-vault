@@ -11,6 +11,54 @@
   gap: var(--space-md);
 }
 
+.dashboard__grid--list {
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+}
+
+.dashboard__grid--list .card {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.dashboard__grid--list .card__body {
+  flex: 1;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+.dashboard__grid--list .card__header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.dashboard__grid--list .card__content {
+  flex: 1;
+}
+
+.dashboard__grid--list .card__preview {
+  display: none;
+}
+
+.dashboard__grid--list .card__divider {
+  width: 1px;
+  height: auto;
+  margin: var(--space-md) 0;
+}
+
+.dashboard__grid--list .card__footer {
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 1px solid var(--border);
+}
+
 .dashboard__status {
   margin-bottom: var(--space-md);
 }
@@ -115,6 +163,53 @@
 }
 
 .dashboard__sort-btn--active:hover {
+  color: var(--primary-hover);
+}
+
+.dashboard__view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--surface-low);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3px;
+}
+
+.dashboard__view-btn {
+  width: 32px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius) - 2px);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.dashboard__view-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.dashboard__view-btn:hover {
+  color: var(--text-primary);
+  background: var(--surface-container);
+}
+
+.dashboard__view-btn--active {
+  color: var(--primary);
+  background: rgba(88, 166, 255, 0.1);
+  border-color: rgba(88, 166, 255, 0.2);
+}
+
+.dashboard__view-btn--active:hover {
   color: var(--primary-hover);
 }
 
@@ -439,5 +534,9 @@
 
   .card__title {
     font-size: var(--fs-body-lg);
+  }
+
+  .dashboard__view-toggle {
+    display: none;
   }
 }
