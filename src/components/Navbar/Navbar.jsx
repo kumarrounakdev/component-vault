@@ -130,6 +130,12 @@ const Navbar = () => {
           >
             Component Vault
           </h2>
+          <span
+            className="navbar__count-badge"
+            title={`${components.length} component${components.length === 1 ? "" : "s"}`}
+          >
+            {components.length}
+          </span>
         </div>
 
         <div className="navbar__center">

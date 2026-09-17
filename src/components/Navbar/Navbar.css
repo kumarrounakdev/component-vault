@@ -15,6 +15,9 @@
 
 .navbar__left {
   min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .navbar__title {
@@ -30,6 +33,31 @@
 
 .navbar__title:hover {
   color: var(--primary);
+}
+
+.navbar__count-badge {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-highest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.navbar__count-badge:hover {
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 .navbar__center {
