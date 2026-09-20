@@ -493,9 +493,69 @@
     display: none;
   }
 
+  .navbar__trash-btn {
+    display: none;
+  }
+
   .navbar__count-badge {
     font-size: 10px;
   }
+}
+
+/* Trash Button */
+.navbar__trash-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.navbar__trash-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.navbar__trash-btn:hover {
+  color: var(--error-text);
+  border-color: var(--error-text);
+  background: rgba(255, 180, 171, 0.05);
+}
+
+.navbar__trash-btn--active {
+  color: var(--error-text);
+  border-color: var(--error-text);
+  background: rgba(255, 180, 171, 0.1);
+}
+
+.navbar__trash-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--error);
+  color: #fff;
+  border: 1px solid var(--surface-low);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
 }
 
 /* Collections Button */

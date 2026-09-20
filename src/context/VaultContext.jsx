@@ -6,6 +6,7 @@ export const VaultContext = createContext();
 const STORAGE_KEY = "component-vault";
 const TAGS_STORAGE_KEY = "component-vault-tags";
 const COLLECTIONS_STORAGE_KEY = "component-vault-collections";
+const TRASH_STORAGE_KEY = "component-vault-trash";
 const DEFAULT_TAGS = ["UI", "HOOKS", "LAYOUTS", "UTILS", "FORMS", "DATA"];
 
 const TAG_PALETTE = [
@@ -55,6 +56,15 @@ const loadCollectionsFromStorage = () => {
   }
 };
 
+const loadTrashFromStorage = () => {
+  try {
+    const data = localStorage.getItem(TRASH_STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
 const saveToStorage = (components) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(components));
@@ -79,11 +89,20 @@ const saveCollectionsToStorage = (collections) => {
   }
 };
 
+const saveTrashToStorage = (deleted) => {
+  try {
+    localStorage.setItem(TRASH_STORAGE_KEY, JSON.stringify(deleted));
+  } catch (e) {
+    console.error("Failed to save trash:", e);
+  }
+};
+
 export const VaultProvider = ({ children }) => {
   const [searchParams] = useSearchParams();
   const [components, setComponents] = useState(loadFromStorage);
   const [tags, setTags] = useState(loadTagsFromStorage);
   const [collections, setCollections] = useState(loadCollectionsFromStorage);
+  const [trash, setTrash] = useState(loadTrashFromStorage);
   const [activeFilter, setActiveFilter] = useState(
     () => searchParams.get("filter") || "all"
   );
@@ -110,6 +129,10 @@ export const VaultProvider = ({ children }) => {
   useEffect(() => {
     saveCollectionsToStorage(collections);
   }, [collections]);
+
+  useEffect(() => {
+    saveTrashToStorage(trash);
+  }, [trash]);
 
   // Components
   const addComponent = (newComponent) => {
@@ -145,7 +168,14 @@ export const VaultProvider = ({ children }) => {
   };
 
   const deleteComponent = (id) => {
-    setComponents((prev) => prev.filter((comp) => comp.id !== id));
+    const comp = components.find((c) => c.id === id);
+    if (!comp) return;
+
+    setComponents((prev) => prev.filter((c) => c.id !== id));
+    setTrash((prev) => [
+      { ...comp, deletedAt: new Date().toISOString() },
+      ...prev,
+    ]);
     // Remove from all collections
     setCollections((prev) =>
       prev.map((col) => ({
@@ -153,6 +183,24 @@ export const VaultProvider = ({ children }) => {
         componentIds: col.componentIds.filter((cId) => cId !== id),
       }))
     );
+  };
+
+  const restoreComponent = (id) => {
+    const comp = trash.find((c) => c.id === id);
+    if (!comp) return;
+
+    setTrash((prev) => prev.filter((c) => c.id !== id));
+    const restored = { ...comp };
+    delete restored.deletedAt;
+    setComponents((prev) => [...prev, restored]);
+  };
+
+  const permanentlyDelete = (id) => {
+    setTrash((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const emptyTrash = () => {
+    setTrash([]);
   };
 
   const updateComponent = (id, updatedData) => {
@@ -357,6 +405,7 @@ export const VaultProvider = ({ children }) => {
         components,
         tags,
         collections,
+        trash,
         activeFilter,
         setActiveFilter,
         activeTagFilters,
@@ -370,6 +419,9 @@ export const VaultProvider = ({ children }) => {
         getComponent,
         toggleFavourite,
         deleteComponent,
+        restoreComponent,
+        permanentlyDelete,
+        emptyTrash,
         updateComponent,
         duplicateComponent,
         importVaultData,

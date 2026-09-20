@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import ComponentView from "./components/ComponentView/ComponentView";
 import CreateComponent from "./components/CreateComponent/CreateComponent";
 import Collections from "./components/Collections/Collections";
+import Trash from "./components/Trash/Trash";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "collections",
         element: <Collections />,
+      },
+      {
+        path: "trash",
+        element: <Trash />,
       },
     ],
   },
