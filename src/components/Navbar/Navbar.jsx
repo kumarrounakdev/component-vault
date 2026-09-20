@@ -32,6 +32,7 @@ const Navbar = () => {
     { id: "all", label: "All Components" },
     { id: "favourites", label: "Favourites" },
     { id: "recent", label: "Recently Added" },
+    { id: "edited", label: "Recently Edited" },
     ...tags.map((tag) => ({
       id: tag.toLowerCase(),
       label: tag,
@@ -341,7 +342,7 @@ const Navbar = () => {
                 <div className="navbar__filter-header">Filter by</div>
 
                 <div className="navbar__filter-section">
-                  {FILTERS.slice(0, 3).map((filter) => (
+                  {FILTERS.slice(0, 4).map((filter) => (
                     <button
                       key={filter.id}
                       type="button"
@@ -387,7 +388,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="navbar__filter-section">
-                  {FILTERS.slice(3).map((filter) => {
+                  {FILTERS.slice(4).map((filter) => {
                     const isActive = activeTagFilters.includes(filter.label);
                     return (
                       <button

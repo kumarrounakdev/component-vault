@@ -206,7 +206,9 @@ export const VaultProvider = ({ children }) => {
   const updateComponent = (id, updatedData) => {
     setComponents((prev) =>
       prev.map((comp) =>
-        comp.id === id ? { ...comp, ...updatedData } : comp
+        comp.id === id
+          ? { ...comp, ...updatedData, updatedAt: new Date().toISOString() }
+          : comp
       )
     );
   };
@@ -371,6 +373,13 @@ export const VaultProvider = ({ children }) => {
       case "recent":
         filtered = filtered.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        break;
+      case "edited":
+        filtered = filtered.sort(
+          (a, b) =>
+            new Date(b.updatedAt || b.createdAt) -
+            new Date(a.updatedAt || a.createdAt)
         );
         break;
       default: {
