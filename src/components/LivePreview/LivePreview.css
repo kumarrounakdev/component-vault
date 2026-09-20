@@ -1,0 +1,21 @@
+.live-preview {
+  position: relative;
+  height: 600px;
+  background: var(--surface-low);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  overflow: hidden;
+}
+
+.live-preview__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--surface-lowest);
+}
+
+@media (max-width: 640px) {
+  .live-preview {
+    height: 400px;
+  }
+}

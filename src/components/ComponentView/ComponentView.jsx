@@ -7,6 +7,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import Editor, { loader } from "@monaco-editor/react";
+import LivePreview from "../LivePreview/LivePreview";
 import { VaultContext } from "../../context/VaultContext";
 import {
   editorTheme,
@@ -345,6 +346,15 @@ const ComponentView = () => {
             >
               CSS
             </button>
+            <button
+              type="button"
+              className={`component-view__tab ${
+                activeTab === "preview" ? "component-view__tab--active" : ""
+              }`}
+              onClick={() => setActiveTab("preview")}
+            >
+              PREVIEW
+            </button>
           </div>
 
           <div className="component-view__code-actions">
@@ -352,7 +362,7 @@ const ComponentView = () => {
               <span className="component-view__edit-error">{errors.code}</span>
             )}
 
-            {!isEditing && (
+            {!isEditing && activeTab !== "preview" && (
               <button
                 type="button"
                 className="component-view__copy"
@@ -398,7 +408,12 @@ const ComponentView = () => {
         </div>
 
         <div className="component-view__editor-wrapper">
-          {activeTab === "jsx" ? (
+          {activeTab === "preview" ? (
+            <LivePreview
+              code={isEditing ? editCode : component.code || ""}
+              css={isEditing ? editCss : component.css || ""}
+            />
+          ) : activeTab === "jsx" ? (
             <Editor
               height="600px"
               language="javascript"
