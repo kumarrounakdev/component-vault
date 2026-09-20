@@ -136,6 +136,19 @@ const ComponentView = () => {
     );
   }
 
+  const savedCode = component.code || "";
+  const savedCss = component.css || "";
+  const currentCode =
+    activeTab === "css"
+      ? isEditing
+        ? editCss
+        : savedCss
+      : isEditing
+        ? editCode
+        : savedCode;
+  const lineCount = currentCode === "" ? 0 : currentCode.split("\n").length;
+  const charCount = currentCode.length;
+
   return (
     <div className="component-view">
       <div className="component-view__topbar">
@@ -443,6 +456,17 @@ const ComponentView = () => {
             />
           )}
         </div>
+
+        {activeTab !== "preview" && (
+          <div className="component-view__stats">
+            <span className="component-view__stats-item">
+              {lineCount} lines
+            </span>
+            <span className="component-view__stats-item">
+              {charCount} chars
+            </span>
+          </div>
+        )}
       </div>
 
       {isEditing && (
