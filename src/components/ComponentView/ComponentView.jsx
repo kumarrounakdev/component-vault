@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import AddToCollection from "../AddToCollection/AddToCollection";
 import {
   useParams,
@@ -124,6 +124,45 @@ const ComponentView = () => {
     setIsEditing(false);
     setErrors({});
   };
+
+  const latestRef = useRef({ isEditing, handleEdit, handleSave, handleCancel });
+  latestRef.current = { isEditing, handleEdit, handleSave, handleCancel };
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      const target = e.target;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable ||
+          (target.closest && target.closest(".monaco-editor")))
+      ) {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+      const { isEditing: editing, handleEdit, handleSave, handleCancel } =
+        latestRef.current;
+
+      if (key === "e" && !editing) {
+        e.preventDefault();
+        handleEdit();
+      } else if (key === "s" && editing) {
+        e.preventDefault();
+        handleSave();
+      } else if (key === "escape" && editing) {
+        e.preventDefault();
+        handleCancel();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   if (!component) {
     return (
