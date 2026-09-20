@@ -5,9 +5,11 @@ import {
   Link,
   useNavigate,
   useSearchParams,
+  useBlocker,
 } from "react-router-dom";
 import Editor, { loader } from "@monaco-editor/react";
 import LivePreview from "../LivePreview/LivePreview";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import { VaultContext } from "../../context/VaultContext";
 import {
   editorTheme,
@@ -49,6 +51,17 @@ const ComponentView = () => {
   const [showCollectionModal, setShowCollectionModal] = useState(false);
   const { getComponentCollections } = useContext(VaultContext);
   const componentCollections = component ? getComponentCollections(id) : [];
+  const blocker = useBlocker(isEditing);
+
+  useEffect(() => {
+    if (!isEditing) return;
+    const onBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [isEditing]);
 
   useEffect(() => {
     if (component) {
@@ -548,6 +561,17 @@ const ComponentView = () => {
         <AddToCollection
           componentId={id}
           onClose={() => setShowCollectionModal(false)}
+        />
+      )}
+      {blocker.state === "blocked" && (
+        <ConfirmDialog
+          title="Discard unsaved changes?"
+          message="You have unsaved edits to this component. Leaving now will discard them."
+          confirmLabel="Discard & Leave"
+          cancelLabel="Stay"
+          destructive
+          onConfirm={blocker.proceed}
+          onClose={blocker.reset}
         />
       )}
       </div>
