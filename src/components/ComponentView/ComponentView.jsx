@@ -47,6 +47,7 @@ const ComponentView = () => {
   const [editCode, setEditCode] = useState("");
   const [editCss, setEditCss] = useState("");
   const [errors, setErrors] = useState({});
+  const [saveStatus, setSaveStatus] = useState("idle");
 
   const [showCollectionModal, setShowCollectionModal] = useState(false);
   const { getComponentCollections } = useContext(VaultContext);
@@ -79,6 +80,30 @@ const ComponentView = () => {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    if (!isEditing) {
+      setSaveStatus("idle");
+      return;
+    }
+    setSaveStatus("unsaved");
+    const timer = setTimeout(() => {
+      if (!editName.trim() || !editDescription.trim() || !editCode.trim()) {
+        setSaveStatus("dirty");
+        return;
+      }
+      setSaveStatus("saving");
+      updateComponent(id, {
+        name: editName.trim(),
+        tag: editTag,
+        description: editDescription.trim(),
+        code: editCode,
+        css: editCss,
+      });
+      setSaveStatus("saved");
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [isEditing, editName, editTag, editDescription, editCode, editCss]);
+
   const handleDelete = () => {
     deleteComponent(id);
     navigate("/");
@@ -98,6 +123,7 @@ const ComponentView = () => {
 
   const handleEdit = () => {
     setIsEditing(true);
+    setSaveStatus("unsaved");
     setErrors({});
   };
 
@@ -468,6 +494,16 @@ const ComponentView = () => {
 
             {isEditing && (
               <span className="component-view__editing-badge">EDITING</span>
+            )}
+            {isEditing && saveStatus !== "idle" && (
+              <span
+                className={`component-view__autosave component-view__autosave--${saveStatus}`}
+              >
+                {saveStatus === "saving" && "Saving..."}
+                {saveStatus === "saved" && "Auto-saved"}
+                {saveStatus === "unsaved" && "Unsaved changes"}
+                {saveStatus === "dirty" && "Complete the fields to save"}
+              </span>
             )}
           </div>
         </div>
