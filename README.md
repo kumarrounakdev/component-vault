@@ -29,17 +29,6 @@ A clean, local-first workspace to store, organize, edit, and live-preview reusab
 
 ---
 
-## ⌨️ Keyboard Shortcuts
-
-| Shortcut | Context | Action |
-| :--- | :--- | :--- |
-| `Cmd / Ctrl` + `K` | Global | Focus navbar search bar |
-| `E` | Component View | Edit current component |
-| `S` | Editor | Save changes |
-| `Esc` | Modal / Editor | Close view / Cancel editing |
-
----
-
 ## 🛠️ Tech Stack
 
 | Category | Technology | Usage |
@@ -50,6 +39,17 @@ A clean, local-first workspace to store, organize, edit, and live-preview reusab
 | **Code Editor** | **Monaco Editor** | Embedded VS Code engine via `@monaco-editor/react` for JSX/CSS editing |
 | **Storage & State** | **Browser `localStorage`** | 100% client-side data persistence with zero backend dependency |
 | **Deployment** | **Netlify** | Continuous integration and production web hosting |
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Context | Action |
+| :--- | :--- | :--- |
+| `Cmd / Ctrl` + `K` | Global | Focus navbar search bar |
+| `E` | Component View | Edit current component |
+| `S` | Editor | Save changes |
+| `Esc` | Modal / Editor | Close view / Cancel editing |
 
 ---
 
