@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import AddToCollection from "../AddToCollection/AddToCollection";
 import {
   useParams,
@@ -39,7 +39,9 @@ const ComponentView = () => {
 
   const [activeTab, setActiveTab] = useState("jsx");
   const [copied, setCopied] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(
+    () => searchParams.get("edit") === "true"
+  );
 
   const [editName, setEditName] = useState("");
   const [editTag, setEditTag] = useState("");
@@ -47,12 +49,39 @@ const ComponentView = () => {
   const [editCode, setEditCode] = useState("");
   const [editCss, setEditCss] = useState("");
   const [errors, setErrors] = useState({});
-  const [saveStatus, setSaveStatus] = useState("idle");
 
   const [showCollectionModal, setShowCollectionModal] = useState(false);
   const { getComponentCollections } = useContext(VaultContext);
   const componentCollections = component ? getComponentCollections(id) : [];
   const blocker = useBlocker(isEditing);
+
+  const makeSignature = (name, tag, description, code, css) =>
+    [name.trim(), tag, description.trim(), (code || "").trim(), (css || "").trim()].join(
+      "|"
+    );
+
+  // Reset the edit draft whenever the viewed component id changes.
+  const [prevComponentId, setPrevComponentId] = useState(id);
+  if (component && id !== prevComponentId) {
+    setPrevComponentId(id);
+    setEditName(component.name);
+    setEditTag(component.tag);
+    setEditDescription(component.description);
+    setEditCode(component.code || "");
+    setEditCss(component.css || "");
+  }
+
+  const [savedSignature, setSavedSignature] = useState("");
+  const draftSignature = isEditing
+    ? makeSignature(editName, editTag, editDescription, editCode, editCss)
+    : "";
+  const saveStatus = isEditing
+    ? !editName.trim() || !editDescription.trim() || !editCode.trim()
+      ? "dirty"
+      : draftSignature === savedSignature
+        ? "saved"
+        : "unsaved"
+    : "idle";
 
   useEffect(() => {
     if (!isEditing) return;
@@ -65,33 +94,11 @@ const ComponentView = () => {
   }, [isEditing]);
 
   useEffect(() => {
-    if (component) {
-      setEditName(component.name);
-      setEditTag(component.tag);
-      setEditDescription(component.description);
-      setEditCode(component.code || "");
-      setEditCss(component.css || "");
-    }
-  }, [component]);
+    if (!isEditing) return;
+    if (!editName.trim() || !editDescription.trim() || !editCode.trim()) return;
+    if (draftSignature === savedSignature) return;
 
-  useEffect(() => {
-    if (searchParams.get("edit") === "true") {
-      setIsEditing(true);
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (!isEditing) {
-      setSaveStatus("idle");
-      return;
-    }
-    setSaveStatus("unsaved");
     const timer = setTimeout(() => {
-      if (!editName.trim() || !editDescription.trim() || !editCode.trim()) {
-        setSaveStatus("dirty");
-        return;
-      }
-      setSaveStatus("saving");
       updateComponent(id, {
         name: editName.trim(),
         tag: editTag,
@@ -99,10 +106,21 @@ const ComponentView = () => {
         code: editCode,
         css: editCss,
       });
-      setSaveStatus("saved");
+      setSavedSignature(draftSignature);
     }, 1000);
     return () => clearTimeout(timer);
-  }, [isEditing, editName, editTag, editDescription, editCode, editCss]);
+  }, [
+    isEditing,
+    editName,
+    editTag,
+    editDescription,
+    editCode,
+    editCss,
+    draftSignature,
+    savedSignature,
+    id,
+    updateComponent,
+  ]);
 
   const handleDelete = () => {
     deleteComponent(id);
@@ -123,7 +141,6 @@ const ComponentView = () => {
 
   const handleEdit = () => {
     setIsEditing(true);
-    setSaveStatus("unsaved");
     setErrors({});
   };
 
@@ -164,8 +181,11 @@ const ComponentView = () => {
     setErrors({});
   };
 
-  const latestRef = useRef({ isEditing, handleEdit, handleSave, handleCancel });
-  latestRef.current = { isEditing, handleEdit, handleSave, handleCancel };
+  const latestRef = useRef(null);
+
+  useEffect(() => {
+    latestRef.current = { isEditing, handleEdit, handleSave, handleCancel };
+  });
 
   useEffect(() => {
     const onKeyDown = (e) => {

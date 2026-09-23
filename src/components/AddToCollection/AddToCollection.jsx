@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { VaultContext } from "../../context/VaultContext";
 import "./AddToCollection.css";
 

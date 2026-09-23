@@ -1,4 +1,3 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import { VaultProvider } from "./context/VaultContext";
 import { ToastProvider } from "./components/Toast/ToastContext";

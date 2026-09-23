@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { VaultContext } from "../../context/VaultContext";
 import "./Trash.css";

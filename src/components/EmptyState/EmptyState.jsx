@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import { useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { VaultContext } from "../../context/VaultContext";
 import { importVault } from "../../utils/importVault";

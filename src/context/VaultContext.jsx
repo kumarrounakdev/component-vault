@@ -1,7 +1,9 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SAMPLE_COMPONENTS } from "../data/sampleComponents";
 
+// Context + provider live together intentionally; disable fast-refresh rule for this file
+// eslint-disable-next-line react-refresh/only-export-components
 export const VaultContext = createContext();
 
 const STORAGE_KEY = "component-vault";
