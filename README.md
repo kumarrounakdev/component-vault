@@ -2,7 +2,7 @@
 
 A clean, local-first workspace to store, organize, edit, and live-preview reusable React UI components.
 
-[🚀 Live Demo](https://componentvault.netlify.app/) · [🐛 Report Bug](https://github.com/your-username/component-vault/issues)
+[🚀 Live Demo](https://componentvault.netlify.app/)
 
 ---
 
