@@ -1,4 +1,4 @@
-# 📦 Component Vault
+# Component Vault
 
 A clean, local-first workspace to store, organize, edit, and live-preview reusable React UI components.
 
