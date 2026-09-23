@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { VaultContext } from "../../context/VaultContext";
 import TagManager from "../TagManager/TagManager";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import { exportVault } from "../../utils/exportVault";
 import "./Navbar.css";
+import "../ConfirmDialog/ConfirmDialog.css";
 
 const Navbar = () => {
   const {
@@ -18,6 +20,7 @@ const Navbar = () => {
     toggleTagFilter,
     searchQuery,
     setSearchQuery,
+    clearAllData,
   } = useContext(VaultContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,6 +28,7 @@ const Navbar = () => {
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
+  const [resetStep, setResetStep] = useState(null);
   const filterRef = useRef(null);
   const searchRef = useRef(null);
 
@@ -260,6 +264,26 @@ const Navbar = () => {
             {trash.length > 0 && (
               <span className="navbar__trash-badge">{trash.length}</span>
             )}
+          </button>
+
+          <button
+            type="button"
+            className="navbar__reset-btn"
+            onClick={() => setResetStep(1)}
+            aria-label="Reset vault"
+            title="Reset vault — clear all data"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
           </button>
 
           <button
@@ -500,6 +524,33 @@ const Navbar = () => {
 
       {tagManagerOpen && (
         <TagManager onClose={() => setTagManagerOpen(false)} />
+      )}
+
+      {resetStep === 1 && (
+        <ConfirmDialog
+          title="Reset vault?"
+          message="This will permanently delete all components, collections, and empty the trash. Your custom tags will be restored to defaults."
+          confirmLabel="Continue"
+          cancelLabel="Cancel"
+          destructive
+          onConfirm={() => setResetStep(2)}
+          onClose={() => setResetStep(null)}
+        />
+      )}
+
+      {resetStep === 2 && (
+        <ConfirmDialog
+          title="Are you absolutely sure?"
+          message="This action cannot be undone. All of your vault data will be erased."
+          confirmLabel="Erase Everything"
+          cancelLabel="Go Back"
+          destructive
+          onConfirm={() => {
+            clearAllData();
+            setResetStep(null);
+          }}
+          onClose={() => setResetStep(null)}
+        />
       )}
     </>
   );

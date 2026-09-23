@@ -558,6 +558,35 @@
   user-select: none;
 }
 
+/* Reset (clear all data) Button */
+.navbar__reset-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.navbar__reset-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.navbar__reset-btn:hover {
+  color: var(--error-text);
+  border-color: var(--error-text);
+  background: rgba(255, 180, 171, 0.05);
+}
+
 /* Collections Button */
 .navbar__collections-btn {
   width: 36px;

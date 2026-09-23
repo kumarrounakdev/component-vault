@@ -241,6 +241,16 @@ export const VaultProvider = ({ children }) => {
     }
   };
 
+  const clearAllData = () => {
+    setComponents([]);
+    setTags(DEFAULT_TAGS);
+    setCollections([]);
+    setTrash([]);
+    setActiveFilter("all");
+    setActiveTagFilters([]);
+    setSearchQuery("");
+  };
+
   // Tags
   const addTag = (tagName) => {
     const formatted = tagName.trim().toUpperCase();
@@ -434,6 +444,7 @@ export const VaultProvider = ({ children }) => {
         updateComponent,
         duplicateComponent,
         importVaultData,
+        clearAllData,
         addTag,
         deleteTag,
         isDefaultTag,
