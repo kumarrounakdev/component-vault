@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { SAMPLE_COMPONENTS } from "../data/sampleComponents";
 
 export const VaultContext = createContext();
 
@@ -32,6 +33,14 @@ const getTagColor = (tagName) => {
 const loadFromStorage = () => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
+    if (data === null) {
+      return SAMPLE_COMPONENTS.map((sample, index) => ({
+        ...sample,
+        id: `sample-${index}`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }));
+    }
     return data ? JSON.parse(data) : [];
   } catch {
     return [];
