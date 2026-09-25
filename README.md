@@ -96,3 +96,7 @@ A clean, local-first workspace to store, organize, edit, and live-preview reusab
 4. **Backup**: Export your vault periodically via the navbar to keep your component library backed up.
 
 ---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
